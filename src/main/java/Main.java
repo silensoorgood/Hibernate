@@ -1,37 +1,28 @@
-import java.util.Comparator;
-import java.util.List;
-import java.util.SortedSet;
+import Courses.Courses;
+import Student.Student;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 
 public class Main {
     public static void main(String[] args) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
 
-        List<Purchaselist> purchaselists = new PurchalistHelper().getPurchalist();
-        purchaselists.sort(new Comparator<Purchaselist>() {
-            @Override
-            public int compare(Purchaselist o1, Purchaselist o2) {
-                return o1.getCourseName().compareTo(o2.getCourseName());
-            }
-        });
-        String course = purchaselists.get(1).getCourseName();
-        int i = 0;
-        int count = 1;
-        while (i < purchaselists.size()) {
-
-            if ((purchaselists.get(i).getCourseName()).equals(course)) {
-                count++;
-            } else {
-                System.out.println("Курс: " + purchaselists.get(i).getCourseName() + "\tКупило: " + count + " человек");
-                count = 1;
-            }
-            i++;
-            try {
-                course = purchaselists.get(i + 1).getCourseName();
-            } catch (IndexOutOfBoundsException ignore) {
-
-            }
+        Student student = session.get(Student.class, 2);
+        System.out.println("Какие курсы у ученика: ");
+        for (Courses courses1 : student.getCoursesList()) {
+            System.out.println(courses1.getName());
 
         }
+        System.out.println(System.lineSeparator());
 
+        Courses courses = session.get(Courses.class, 1);
+        System.out.println("Студенты курса:");
+        for (Student student1 : courses.getStudentList()) {
+            System.out.println(student1.getName());
+        }
+
+        System.out.println(System.lineSeparator() + "Имя учителя курса: " + courses.getTeacher().getName());
     }
 }
