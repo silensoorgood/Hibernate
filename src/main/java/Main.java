@@ -1,5 +1,6 @@
 import Courses.Courses;
 import Student.Student;
+import Subscriptions.Subscriptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -8,6 +9,8 @@ public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
+
+        
 
         Student student = session.get(Student.class, 2);
         System.out.println("Какие курсы у ученика: ");
@@ -25,4 +28,5 @@ public class Main {
 
         System.out.println(System.lineSeparator() + "Имя учителя курса: " + courses.getTeacher().getName());
     }
+
 }
