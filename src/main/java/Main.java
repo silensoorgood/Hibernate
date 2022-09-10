@@ -1,32 +1,35 @@
 import Courses.Courses;
+import PuchaseListKey.LinkedPurchaseList;
+import PuchaseListKey.LinkedPurchaseListKey;
+import PuchaseListKey.PurchaseList;
 import Student.Student;
 import Subscriptions.Subscriptions;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import java.util.List;
 
 
 public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-
-        
-
-        Student student = session.get(Student.class, 2);
-        System.out.println("Какие курсы у ученика: ");
-        for (Courses courses1 : student.getCoursesList()) {
-            System.out.println(courses1.getName());
-
+        String hql = "From " + PurchaseList.class.getSimpleName();
+        List<PurchaseList> purchaseLists = session.createQuery(hql).getResultList();
+        Transaction transaction = session.beginTransaction();
+        for (PurchaseList purchaseList : purchaseLists) {
+            LinkedPurchaseList linkedPurchaseList = new LinkedPurchaseList();
+            linkedPurchaseList.setCourseId(purchaseList.getCourses().getId());
+            linkedPurchaseList.setStudentId(purchaseList.getStudent().getId());
+            linkedPurchaseList.setKey(new LinkedPurchaseListKey(purchaseList.getStudent().getId(), purchaseList.getCourses().getId()));
+            session.save(linkedPurchaseList);
         }
-        System.out.println(System.lineSeparator());
+        transaction.commit();
+        sessionFactory.close();
 
-        Courses courses = session.get(Courses.class, 1);
-        System.out.println("Студенты курса:");
-        for (Student student1 : courses.getStudentList()) {
-            System.out.println(student1.getName());
-        }
-
-        System.out.println(System.lineSeparator() + "Имя учителя курса: " + courses.getTeacher().getName());
     }
-
 }

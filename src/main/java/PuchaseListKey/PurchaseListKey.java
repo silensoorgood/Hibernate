@@ -9,13 +9,12 @@ import java.io.Serializable;
 @Embeddable
 @Data
 public class PurchaseListKey implements Serializable {
+    public PurchaseListKey() {
+    }
 
     public PurchaseListKey(String studentName, String courseName) {
         this.studentName = studentName;
         this.courseName = courseName;
-    }
-    public PurchaseListKey(){
-
     }
 
     @Column(name = "Student_name")

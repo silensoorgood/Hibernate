@@ -11,7 +11,7 @@ import java.util.List;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "Subscriptions", joinColumns = {@JoinColumn(name = "Student_id")},
