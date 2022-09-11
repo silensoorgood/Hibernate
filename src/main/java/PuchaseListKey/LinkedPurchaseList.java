@@ -1,8 +1,6 @@
 package PuchaseListKey;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class LinkedPurchaseList {
     @EmbeddedId
+
     private LinkedPurchaseListKey key;
     @Column(name = "Student_id", insertable = false, updatable = false)
     private int studentId;

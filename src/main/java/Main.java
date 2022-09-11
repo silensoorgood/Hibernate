@@ -22,11 +22,20 @@ public class Main {
         List<PurchaseList> purchaseLists = session.createQuery(hql).getResultList();
         Transaction transaction = session.beginTransaction();
         for (PurchaseList purchaseList : purchaseLists) {
+
+            LinkedPurchaseListKey linkedPurchaseListKey = new LinkedPurchaseListKey();
+            linkedPurchaseListKey.setCourseId(purchaseList.getCourses().getId());
+            linkedPurchaseListKey.setStudentId(purchaseList.getStudent().getId());
+
             LinkedPurchaseList linkedPurchaseList = new LinkedPurchaseList();
+            linkedPurchaseList.setKey(linkedPurchaseListKey);
             linkedPurchaseList.setCourseId(purchaseList.getCourses().getId());
             linkedPurchaseList.setStudentId(purchaseList.getStudent().getId());
-            linkedPurchaseList.setKey(new LinkedPurchaseListKey(purchaseList.getStudent().getId(), purchaseList.getCourses().getId()));
-            session.save(linkedPurchaseList);
+
+            if (purchaseList.getClass().getSimpleName().isEmpty()) {
+                session.save(linkedPurchaseList);
+            }
+
         }
         transaction.commit();
         sessionFactory.close();
